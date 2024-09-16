@@ -1,2 +1,31 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
+<div class="container">
+  <h1>Home</h1>
+
+  <div id="home-links" class="mb-3">
+    <%= link_to 'New Game', new_game_path, class: 'btn btn-primary' %>
+    <%= link_to 'Find Friends', new_user_friendship_path(current_user.id), class: 'btn btn-primary' %>
+  </div>
+
+  <div id="home-friendships">
+    <h2>Friendships</h2>
+    <ul class="list-group">
+      <% if @friendships.present? %>
+        <% @friendships.each do |friendship| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <% if friendship.user1 == current_user %>
+              <%= friendship.user2.username %>
+            <% else %>
+              <%= friendship.user1.username %>
+            <% end %>
+            <% if friendship.status == 'pending' %>
+              <%= link_to 'Accept', new_game_path, class: 'btn btn-primary' %>
+            <% elsif friendship.status == 'accepted' %>
+              <%= link_to 'End Friendship', new_game_path, class: 'btn btn-primary' %>
+            <% end %>
+            <span class="badge text-bg-primary rounded-pill"><%= friendship.status %></span>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
+</div>

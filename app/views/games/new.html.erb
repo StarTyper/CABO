@@ -1,0 +1,8 @@
+<div class="container">
+  <h1>New Game</h1>
+  <%= simple_form_for @game do |f| %>
+    <%= f.input :name %>
+    <%= f.input :player_count, collection: [2, 3, 4, 5], prompt: 'Select player count' %>
+    <%= f.button :submit %>
+  <% end %>
+</div>
