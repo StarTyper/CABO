@@ -6,4 +6,5 @@ class Player < ApplicationRecord
   validates :game_id, presence: true
   validates :player_id, presence: true, inclusion: { in: [1, 2, 3, 4, 5] }
   validates :score, presence: true
+  validates :status, presence: true, inclusion: { in: %w[pending accepted declined] }
 end

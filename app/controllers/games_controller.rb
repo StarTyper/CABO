@@ -17,6 +17,14 @@ class GamesController < ApplicationController
     @game = Game.find(params[:id])
   end
 
+  def update
+    raise
+    @player = Player.find(params[:id])
+    @player.status = 'accepted'
+    @player.save
+    redirect_to game_path(@game)
+  end
+
   private
 
   def game_params
