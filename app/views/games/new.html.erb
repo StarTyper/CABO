@@ -3,6 +3,6 @@
   <%= simple_form_for @game do |f| %>
     <%= f.input :name %>
     <%= f.input :player_count, collection: [2, 3, 4, 5], prompt: 'Select player count' %>
-    <%= f.button :submit %>
+    <%= f.button :submit, class: "btn btn-primary" %>
   <% end %>
 </div>

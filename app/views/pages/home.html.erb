@@ -46,4 +46,27 @@
       <% end %>
     </ul>
   </div>
+  <div id="home-games">
+    <h2>Games</h2>
+    <ul class="list-group">
+      <% if @games.present? %>
+        <% @games.each do |game| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <%= game.name %>
+            <div>
+              <%= link_to game_path(game), class: 'btn btn-primary' do %>
+                <i class="c fa-solid
+                  <% if game.player_count == 2 %>
+                    fa-user
+                  <% else game.player_count > 2 %>
+                    fa-users
+                  <% end %>
+                "></i>
+              <% end %>
+            </div>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
 </div>
