@@ -1,5 +1,6 @@
 <div class="container">
   <h1>Home</h1>
+  <p>Welcome <%= @user.username %></p>
 
   <div id="home-links" class="mb-3">
     <%= link_to 'New Game', new_game_path, class: 'btn btn-primary' %>
@@ -17,12 +18,29 @@
             <% else %>
               <%= friendship.user1.username %>
             <% end %>
-            <% if friendship.status == 'pending' %>
-              <%= link_to 'Accept', new_game_path, class: 'btn btn-primary' %>
+            <% if friendship.status == 'pending' && friendship.user2 == current_user %>
+              <div>
+                <%= link_to 'Accept', friendship_path(friendship), data: {turbo_method: :patch}, class: 'btn btn-primary' %>
+                <%= link_to 'Refuse', friendship_path(friendship), method: :delete, data: {turbo_method: :delete, turbo_confirm: "Are you sure to refuse this friendship?"}, class: 'btn btn-danger' %>
+              </div>
+            <% elsif friendship.status == 'pending' && friendship.user1 == current_user %>
+              <div>
+                <%= link_to 'Cancel Request', friendship_path(friendship), method: :delete, data: {turbo_method: :delete, turbo_confirm: "Are you sure to cancel this friendship request?"}, class: 'btn btn-danger' %>
+              </div>
             <% elsif friendship.status == 'accepted' %>
-              <%= link_to 'End Friendship', new_game_path, class: 'btn btn-primary' %>
+              <%= link_to friendship_path(friendship), method: :delete, data: {turbo_method: :delete, turbo_confirm: "Are you sure to end this friendship?"},
+                  class: "trash-activity ms-2 align-content-center" do %>
+                <i class="c fa-solid fa-trash text-danger"></i>
+              <% end %>
             <% end %>
-            <span class="badge text-bg-primary rounded-pill"><%= friendship.status %></span>
+            <span class="badge rounded-pill
+              <% if friendship.status == 'pending' %>
+                bg-warning
+              <% else friendship.status == 'accepted' %>
+                bg-success
+              <% end %>
+            text-bg-primary
+            "><%= friendship.status %></span>
           </li>
         <% end %>
       <% end %>

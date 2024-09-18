@@ -12,25 +12,13 @@
     </div>
   </div>
 
-  <%= simple_form_for [@user, @friendship] do |f| %>
-    <div class="input">
-      <label>My Username</label>
-      <input type="text" value="<%= @user.username %>" readonly="readonly" class="form-control">
-    </div>
-    <%= f.input :user2_id, label: "Friend's Username", collection: @users, label_method: :username, value_method: :id, prompt: 'Select user' %>
-    <%= f.button :submit, "Add Friendship" %>
-  <% end %>
-
   <div class="row justify-content-center">
     <div class="col-sm-8">
       <div id="friendship-results">
         <% if @users.any? %>
-          <h4>Search Results:</h4>
-          <% @users.each do |user| %>
-            <p><%= user.username %></p>
-          <% end %>
+          <%= render "form", friendship: @friendship, user: @user %>
         <% else %>
-          <em>Sorry, no users found matching your query.</em>
+          <em>Enter the username of your friend.</em>
         <% end %>
       </div>
     </div>

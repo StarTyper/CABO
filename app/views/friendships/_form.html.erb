@@ -1,0 +1,8 @@
+<%= simple_form_for [@user, @friendship] do |f| %>
+    <!-- <div class="input"> -->
+      <!-- <label>My Username</label> -->
+      <!-- <input type="text" value="<%= @user.username %>" readonly="readonly" class="form-control"> -->
+    <!-- </div> -->
+    <%= f.input :user2_id, label: "Friend", collection: @users, label_method: :username, value_method: :id, prompt: 'Select user' %>
+    <%= f.button :submit, "Request Friendship", class: "btn btn-primary" %>
+  <% end %>

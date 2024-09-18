@@ -14,6 +14,6 @@ Rails.application.routes.draw do
     resources :players, shallow: true
   end
   resources :users, only: %i[show new create edit update destroy] do
-    resources :friendships, only: %i[index show new create destroy], shallow: true
+    resources :friendships, only: %i[index show new create update destroy], shallow: true
   end
 end
