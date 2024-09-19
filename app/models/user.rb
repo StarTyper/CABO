@@ -8,8 +8,18 @@ class User < ApplicationRecord
 
   has_many :games
   has_many :players
-  has_many :friendships
-  has_many :users, through: :friendships
+
+  # Associations for friendships
+  has_many :friendships_as_user1, class_name: 'Friendship', foreign_key: 'user1_id'
+  has_many :friendships_as_user2, class_name: 'Friendship', foreign_key: 'user2_id'
+
+  has_many :friends_as_user1, through: :friendships_as_user1, source: :user2
+  has_many :friends_as_user2, through: :friendships_as_user2, source: :user1
+
+  # This combines both directions
+  def all_friends
+    friends_as_user1 + friends_as_user2
+  end
 
   validates :email, presence: true, uniqueness: true
   validates :password, presence: true

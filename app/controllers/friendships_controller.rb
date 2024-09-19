@@ -58,7 +58,6 @@ class FriendshipsController < ApplicationController
     if @friendship.destroy
       redirect_to home_path, alert: 'friendship ended successfully'
     else
-      # Handle friendship not found or destruction failure
       redirect_to home_path, alert: 'friendship could not be ended'
     end
   end

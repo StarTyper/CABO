@@ -1,4 +1,26 @@
 <div class="container">
   <h1><%= @game.name %></h1>
+  <%= link_to 'Delete Game', game_path(@game), method: :delete, data: {turbo_method: :delete, turbo_confirm: "Are you sure to delete this game?"}, class: "btn btn-danger" %>
   <p><%= @game.player_count %> Player</p>
+  <div id="friendship-results">
+    <ul class="list-group">
+      <% @players.each_with_index do |player, index| %>
+        <% if player.id %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <%= player.user.username %>
+            <div>
+              <%= link_to 'remove player', player_path(player), method: :delete, data: {turbo_method: :delete, turbo_confirm: "Are you sure to remove this player?"}, class: 'btn btn-danger' %>
+            </div>
+          </li>
+        <% else %>
+          <p>Player <%= index + 1 %></p>
+          <%= simple_form_for [@game, player] do |f| %>
+            <%= f.hidden_field :player_id, value: index + 1 %>
+            <%= f.input :user, label: false, collection: @users, label_method: :username, value_method: :id, prompt: 'Select Player' %>
+            <%= f.button :submit, "Assign Player", class: "btn btn-primary" %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
 </div>
