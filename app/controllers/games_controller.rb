@@ -36,20 +36,6 @@ class GamesController < ApplicationController
       @player5 = @game.players.find_by(player_id: 5) || Player.new
       @players << @player5
     end
-    # @player2 = @game.players.find_by(player_id: 2)
-    # @player3 = @game.players.find_by(player_id: 3) if @game.player_count > 2
-    # @player4 = @game.players.find_by(player_id: 4) if @game.player_count > 3
-    # @player5 = @game.players.find_by(player_id: 5) if @game.player_count > 4
-    # @players = @game.players
-    # raise
-  end
-
-  def update
-    raise
-    @player = Player.find(params[:id])
-    @player.status = 'accepted'
-    @player.save
-    redirect_to game_path(@game)
   end
 
   def destroy
@@ -59,6 +45,26 @@ class GamesController < ApplicationController
     else
       redirect_to game_path(@game), alert: 'game could not be deleted'
     end
+  end
+
+  def start
+    @game = Game.find(params[:id])
+    @game.start_time = Time.now
+    if @game.save
+      redirect_to play_game_path(@game)
+    else
+      redirect_to @game, alert: 'game could not be started'
+    end
+  end
+
+  def play
+    @game = Game.find(params[:id])
+    @players = @game.players
+  end
+
+  def end
+    @game = Game.find(params[:id])
+    @game.end_time = Time.now
   end
 
   private

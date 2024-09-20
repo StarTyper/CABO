@@ -13,6 +13,9 @@ Rails.application.routes.draw do
   resources :games, only: %i[index show new create destroy] do
     resources :players, shallow: true
   end
+
+  get "games/:id/play", to: "games#play", as: :play_game
+
   resources :users, only: %i[show new create edit update destroy] do
     resources :friendships, only: %i[index show new create update destroy], shallow: true
   end
