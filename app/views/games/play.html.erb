@@ -1,1 +1,10 @@
-<h1>Hello From Play Game</h1>
+<div id="container">
+  <h1>Hello From Play Game</h1>
+  <div id="board">
+    <% @players.each do |player| %>
+      <div id="player<%= player.player_id %>">
+        <h3><%= player.user.username %></h3>
+      </div>
+    <% end %>
+  </div>
+</div>
