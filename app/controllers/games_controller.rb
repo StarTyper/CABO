@@ -16,27 +16,13 @@ class GamesController < ApplicationController
   def show
     @game = Game.find(params[:id])
     @player = Player.new
-    @users = current_user.all_friends
-    @users << current_user
+    @users = current_user.all_friends + [current_user]
 
-    @players = []
-    @player1 = @game.players.find_by(player_id: 1) || Player.new
-    @players << @player1
-    @player2 = @game.players.find_by(player_id: 2) || Player.new
-    @players << @player2
-    if @game.player_count > 2
-      @player3 = @game.players.find_by(player_id: 3) || Player.new
-      @players << @player3
-    end
-    if @game.player_count > 3
-      @player4 = @game.players.find_by(player_id: 4) || Player.new
-      @players << @player4
-    end
-    if @game.player_count > 4
-      @player5 = @game.players.find_by(player_id: 5) || Player.new
-      @players << @player5
+    @players = (1..[@game.player_count, 5].min).map do |player_id|
+      @game.players.find_by(player_id: player_id) || Player.new
     end
   end
+
 
   def destroy
     @game = Game.find(params[:id])
@@ -50,8 +36,9 @@ class GamesController < ApplicationController
   def start
     @game = Game.find(params[:id])
     @game.start_time = Time.now
+    create_game_cards
     if @game.save
-      redirect_to play_game_path(@game)
+      redirect_to play_path(@game)
     else
       redirect_to @game, alert: 'game could not be started'
     end
@@ -71,5 +58,20 @@ class GamesController < ApplicationController
 
   def game_params
     params.require(:game).permit(:name, :player_count)
+  end
+
+  def create_game_cards
+    @cards = []
+    add_cards([1, 13], 2)
+    add_cards((2..12).to_a, 4)
+    @cards.shuffle!
+  end
+
+  def add_cards(card_ids, count)
+    count.times do
+      card_ids.each do |card_id|
+        @cards << GameCard.create!(game_id: @game.id, card_id:, position: 0)
+      end
+    end
   end
 end

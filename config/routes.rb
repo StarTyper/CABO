@@ -14,7 +14,9 @@ Rails.application.routes.draw do
     resources :players, shallow: true
   end
 
-  get "games/:id/play", to: "games#play", as: :play_game
+  get "games/:id/play", to: "games#play", as: :play
+  patch "games/:id/start", to: "games#start", as: :start
+  patch "games/:id/end", to: "games#end", as: :end
 
   resources :users, only: %i[show new create edit update destroy] do
     resources :friendships, only: %i[index show new create update destroy], shallow: true
