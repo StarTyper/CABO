@@ -1,7 +1,6 @@
 class GameCard < ApplicationRecord
   belongs_to :card
   belongs_to :game
-  has_many :players, through: :game
 
   validates :game_id, presence: true
   validates :card_id, presence: true

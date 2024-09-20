@@ -3,7 +3,7 @@
   <p><%= @game.player_count %> Player</p>
   <div id="game-show-player-list">
     <% if @game.user == current_user %>
-      <% if @game.user == current_user %>
+      <% if @game.user == current_user && @players.all? { |player| player.status == 'accepted' && player.id.present? } %>
         <%= link_to 'Start', start_path(), data: {turbo_method: :patch}, class: 'btn btn-success' %>
       <% end %>
       <%= link_to 'Delete Game', game_path(@game), method: :delete, data: {turbo_method: :delete, turbo_confirm: "Are you sure to delete this game?"}, class: "btn btn-danger" %>
