@@ -4,6 +4,7 @@ class GamesController < ApplicationController
   def index
     @games = Game.all
   end
+
   def new
     @game = Game.new
   end
@@ -42,19 +43,18 @@ class GamesController < ApplicationController
   def start
     @game.start = Time.now
     create_game_cards
-    if @game.save
-      redirect_to play_path(@game), alert: 'game started successfully'
-    else
-      redirect_to @game, alert: 'game could not be started'
-    end
+    assign_cards_to_positions(@game.player_count)
+    redirect_path = @game.save ? play_path(@game) : @game
+    alert_message = @game.save ? 'game started successfully' : 'game could not be started'
+    redirect_to redirect_path, alert: alert_message
   end
 
   def play
+    @cards = @game.game_cards
     @me = Player.find_by(user: current_user)
-    # assign instance variables for the other players
     @players = @game.players
     @players.each do |player|
-      instance_variable_set("@player#{player.id}", player) if player != @me
+      instance_variable_set("@player#{player.player_id}", player) if player != @me
     end
     raise
   end
@@ -86,5 +86,12 @@ class GamesController < ApplicationController
     add_cards([1, 14], 2)
     add_cards((2..13).to_a, 4)
     @cards.shuffle!
+  end
+
+  def assign_cards_to_positions(player_count)
+    max_players = [player_count, 5].min
+    (1..max_players).each do |position|
+      @cards.drop((position - 1) * 4).first(4).each { |card| card.update(position: position) }
+    end
   end
 end
